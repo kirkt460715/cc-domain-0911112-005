@@ -7,6 +7,7 @@ from pathlib import Path
 from .validation import reject
 from .artifacts.store import ArtifactStore
 from .artifacts.ingest import Ingestion
+from .deliveries.inbox import DeliveryInbox
 from .catalog.database import CatalogDatabase
 from .catalog.registry import Registry
 from .catalog.derive import Derivations
@@ -26,6 +27,7 @@ class Vault:
         self.database = CatalogDatabase(root / "catalog.sqlite3")
         self.registry = Registry(self.database, self.artifacts)
         self.ingestion = Ingestion(self.database, self.registry, self.artifacts)
+        self.deliveries = DeliveryInbox(self.database, self.registry, self.ingestion)
         self.derivations = Derivations(self.registry, self.ingestion)
         self.checks = DatasetChecks(
             self.database, self.registry, self.ingestion, self.artifacts

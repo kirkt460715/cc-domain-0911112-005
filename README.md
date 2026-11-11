@@ -20,3 +20,21 @@
 fixtures 中提供目录投递或网页原始样本，复制到临时目录后联调。
 
 原有操作参数可通过 python3 -m trialvault --help 查询。
+
+## 仪器投递接入
+
+生产端先写数据文件，再将清单原子改名为 manifest.ready。扫描动作只认
+manifest.ready：未出现的目录报告为 pending（尚未传完），出现后才校验成员
+的长度、摘要、行数与契约，失败组隔离为 quarantined 并记录原因，正式数据
+继续用旧版，同目录其他完整批次照常登记。同一投递号重复扫描幂等复用，
+同号换内容必须隔离；投递目录只读，任何结果都不删原文件。复制期间被替换
+的成员判为 unstable，下轮扫描自动重试；登记提交后未归档便重启的组在下次
+扫描时恢复，不会重复登记。
+
+    {"action": "deliveries_scan", "root": "incoming"}
+    {"action": "deliveries"}
+    {"action": "delivery", "id": "lab-delivery-01"}
+
+扫描根目录本身含 manifest.ready 时按单组处理，否则每个含清单的子目录各算
+一组。演练：把 fixtures/dropbox 复制到临时目录，先只放部分文件扫描，补齐
+后再扫，最后改一行 manifest 内容（同号换内容）观察隔离。

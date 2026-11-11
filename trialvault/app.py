@@ -22,6 +22,12 @@ def dispatch(vault, request):
         if path.is_symlink() or not path.is_file() or path.stat().st_size > 32000000:
             reject("path", "ingestion file must be bounded regular file")
         return vault.ingestion.ingest(content=path.read_bytes(), **options)
+    if action == "deliveries_scan":
+        return vault.deliveries.scan(**options)
+    if action == "deliveries":
+        return vault.deliveries.list()
+    if action == "delivery":
+        return vault.deliveries.get(options["id"])
     if action == "version":
         return vault.registry.version(options["dataset"], options["version"])
     if action == "versions":
