@@ -1,0 +1,27 @@
+{
+  "delivery_id": "lab-delivery-01",
+  "members": [
+    {
+      "path": "measurements.csv",
+      "dataset": "measurements",
+      "schema_version": 1,
+      "expected_version": 0,
+      "bytes": 29,
+      "sha256": "bc5dd98b3922948f22d3b84c0d15fc9899bacc3190f27d3e6c96be71cd30e332",
+      "rows": 2,
+      "depends_on": [
+        "calibration"
+      ]
+    },
+    {
+      "path": "calibration.jsonl",
+      "dataset": "calibration",
+      "schema_version": 1,
+      "expected_version": 0,
+      "bytes": 35,
+      "sha256": "e4773d1a3bd86828c4f0434ae110305164fe1c1f8f61722e26c8ed96bfc8feac",
+      "rows": 1,
+      "depends_on": []
+    }
+  ]
+}
